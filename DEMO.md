@@ -1,64 +1,130 @@
-# Demo Instructions
+# Multi-Provider AI Demo
 
-## Quick Test (Without OpenAI API)
-
-If you want to test the frontend interface without setting up OpenAI API:
+## Quick UI Test (No API Keys Needed)
 
 1. Open `frontend/index.html` in your browser
-2. You'll see the beautiful interface
-3. The backend won't work without API key, but you can see the UI
+2. See the beautiful interface with provider selection dropdown
+3. Backend won't work without API keys, but you can explore the UI
 
-## Full Demo (With OpenAI API)
+## Full Demo with Multiple AI Providers
 
-1. **Get OpenAI API Key**
-   - Go to https://platform.openai.com/api-keys
-   - Create a new API key
+### Step 1: Choose Your Provider(s)
+Pick one or more AI providers and get their API keys:
 
-2. **Set up environment**
-   ```bash
-   cd miva-ai-quicknotes
-   cp backend/.env.example backend/.env
-   # Edit backend/.env and add: OPENAI_API_KEY=sk-your-key-here
-   ```
+**Option A: OpenAI (Most Popular)**
+- Go to https://platform.openai.com/api-keys
+- Create API key: `sk-proj-...`
 
-3. **Install and run**
-   ```bash
-   pip install -r requirements.txt
-   uvicorn backend.main:app --reload
-   ```
+**Option B: Google Gemini (Google's Latest)**  
+- Go to https://aistudio.google.com/app/apikey
+- Create API key: `AIza...`
 
-4. **Test the app**
-   - Open `frontend/index.html` in browser
-   - Paste sample text like:
-   
-   ```
-   Photosynthesis is the process by which plants convert sunlight into energy. 
-   Chloroplasts contain chlorophyll which captures light energy. The process 
-   involves two main stages: light reactions and the Calvin cycle. During 
-   light reactions, water molecules are split and oxygen is released. The 
-   Calvin cycle uses CO2 to produce glucose using the energy from light reactions.
-   ```
+**Option C: Anthropic Claude (High Quality)**
+- Go to https://console.anthropic.com/
+- Create API key: `sk-ant-...`
 
-5. **Expected Output**
-   - **Summary**: 2-3 sentences about photosynthesis
-   - **Key Points**: 4 bullet points covering main concepts
-   - **Quiz Questions**: 3 questions to test understanding
+**Option D: OpenRouter (Access Multiple Models)**
+- Go to https://openrouter.ai/keys
+- Create API key: `sk-or-...`
 
-## Sample Expected Output
+### Step 2: Configure Environment
+```bash
+cd miva-ai-quicknotes
+cp backend/.env.example backend/.env
+```
 
+Edit `backend/.env` and add your keys:
+```bash
+# Choose your default provider
+AI_PROVIDER=openai
+
+# Add the API keys you have
+OPENAI_API_KEY=sk-proj-your-key-here
+GEMINI_API_KEY=AIza-your-key-here  
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+OPENROUTER_API_KEY=sk-or-your-key-here
+
+# Optionally customize models
+OPENAI_MODEL=gpt-4o-mini
+GEMINI_MODEL=gemini-1.5-flash
+ANTHROPIC_MODEL=claude-3-haiku-20240307
+OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct:free
+```
+
+### Step 3: Install and Run
+```bash
+pip install -r requirements.txt
+cd backend && uvicorn main:app --reload
+```
+
+### Step 4: Test Multi-Provider Support
+
+1. **Open `frontend/index.html` in browser**
+2. **Check available providers** - Click "🔄 Check Available" 
+3. **Test with sample text:**
+
+```
+Machine learning is a subset of artificial intelligence that enables computers to learn 
+and make decisions from data without explicit programming. It involves algorithms that 
+can identify patterns, make predictions, and improve performance over time. The three 
+main types are supervised learning (using labeled data), unsupervised learning 
+(finding hidden patterns), and reinforcement learning (learning through trial and error).
+```
+
+4. **Try different providers:**
+   - Select "OpenAI" → Generate notes
+   - Select "Gemini" → Generate notes  
+   - Compare the different responses and styles
+
+### Expected Multi-Provider Output
+
+**OpenAI Response:**
 ```json
 {
-  "summary": "Photosynthesis is the process where plants convert sunlight into energy using chloroplasts. The process involves light reactions that split water and release oxygen, followed by the Calvin cycle that produces glucose from CO2.",
+  "summary": "Machine learning is an AI subset enabling computers to learn from data without explicit programming. It uses algorithms for pattern recognition and predictions, with three main types: supervised, unsupervised, and reinforcement learning.",
   "key_points": [
-    "Chloroplasts contain chlorophyll for capturing light energy",
-    "Light reactions split water molecules and release oxygen",
-    "Calvin cycle converts CO2 into glucose using light energy",
-    "Process has two main stages working together"
+    "Subset of artificial intelligence focused on learning from data",
+    "Uses algorithms for pattern identification and predictions",  
+    "Supervised learning uses labeled training data",
+    "Reinforcement learning improves through trial and error"
   ],
   "quiz_questions": [
-    "What organelle contains chlorophyll for photosynthesis?",
-    "What are the two main stages of photosynthesis?",
-    "What gas is released during the light reactions?"
-  ]
+    "What are the three main types of machine learning?",
+    "How does supervised learning differ from unsupervised learning?",
+    "What enables machine learning algorithms to improve over time?"
+  ],
+  "_metadata": {
+    "provider": "openai",
+    "model": "gpt-4o-mini"
+  }
 }
 ```
+
+**Gemini Response Style:**
+- Often more conversational summaries
+- Different question phrasing  
+- Unique key point organization
+
+**Claude Response Style:**
+- Very structured and academic
+- Precise technical language
+- Comprehensive question coverage
+
+## Provider Comparison Demo Script
+
+**For Hackathon Demos:**
+
+1. **"Here's the challenge"** - Students need quick summaries from different content sources
+2. **"Here's my solution"** - Multi-provider AI with unified interface  
+3. **Show provider selection** - "Works with OpenAI, Gemini, Claude, OpenRouter"
+4. **Live comparison** - Same text → different providers → show varied outputs
+5. **Highlight architecture** - "One API, multiple AI backends, consistent format"
+
+## Pro Tips for Different Providers
+
+- **OpenAI**: Best for consistent JSON formatting
+- **Gemini**: Great for creative/conversational summaries  
+- **Claude**: Excellent for academic/technical content
+- **OpenRouter**: Access to open-source models (cost-effective)
+
+The multi-provider architecture demonstrates enterprise-level AI integration patterns!

@@ -1,19 +1,11 @@
 # backend/main.py
-import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from openai import OpenAI
+from ai_providers import ai_manager
 
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-
-if not OPENAI_API_KEY:
-    raise RuntimeError("Set OPENAI_API_KEY in environment")
-
-client = OpenAI(api_key=OPENAI_API_KEY)
 
 app = FastAPI(title="Miva AI QuickNotes API", version="1.0.0")
 
@@ -29,10 +21,24 @@ app.add_middleware(
 class TextIn(BaseModel):
     text: str
     max_summary_sentences: int = 3
+    provider: str = None  # Optional: override default provider
 
 @app.get("/")
 async def root():
-    return {"message": "Miva AI QuickNotes API is running"}
+    available_providers = list(ai_manager.providers.keys())
+    return {
+        "message": "Miva AI QuickNotes API is running",
+        "available_providers": available_providers,
+        "default_provider": ai_manager.default_provider
+    }
+
+@app.get("/providers")
+async def list_providers():
+    """List available AI providers and their models"""
+    return {
+        "available_providers": ai_manager.get_available_providers(),
+        "default_provider": ai_manager.default_provider
+    }
 
 @app.post("/summarize")
 async def summarize(payload: TextIn):
@@ -40,6 +46,7 @@ async def summarize(payload: TextIn):
     if not text:
         raise HTTPException(status_code=400, detail="No text provided")
 
+    # Create the prompt
     prompt = f"""
 You are an assistant that creates concise study outputs for university students.
 Input: {text}
@@ -53,24 +60,10 @@ Return only valid JSON.
 """
 
     try:
-        response = client.chat.completions.create(
-            model=MODEL,
-            messages=[
-                {"role": "system", "content": "You produce concise study notes and quiz questions."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=400,
-            temperature=0.2,
-        )
-        answer = response.choices[0].message.content
+        result = await ai_manager.generate_summary(prompt, payload.provider)
+        return result
         
-        # The model should send JSON; try to parse it
-        import json
-        try:
-            data = json.loads(answer)
-        except Exception:
-            # fallback: wrap raw text
-            data = {"raw": answer}
-        return data
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"AI Provider Error: {str(e)}")

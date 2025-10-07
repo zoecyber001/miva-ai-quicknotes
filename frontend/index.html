@@ -116,7 +116,21 @@
     <textarea id="inputText" placeholder="Paste lecture transcript or PDF extracted text here...
 
 Example: 'In today's lecture on photosynthesis, we learned that plants convert sunlight into energy through a complex chemical process. The chloroplasts contain chlorophyll which captures light energy...'"></textarea>
-    <br/>
+    
+    <div style="margin: 15px 0; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+      <label for="providerSelect" style="font-weight: 500;">AI Provider:</label>
+      <select id="providerSelect" style="padding: 8px 12px; border: 2px solid #ecf0f1; border-radius: 6px; font-size: 14px;">
+        <option value="">Use Default</option>
+        <option value="openai">OpenAI (GPT)</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="anthropic">Anthropic Claude</option>
+        <option value="openrouter">OpenRouter</option>
+      </select>
+      <button id="refreshProviders" style="background: #95a5a6; padding: 8px 12px; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 12px;">🔄 Check Available</button>
+    </div>
+    
+    <div id="providerStatus" style="margin-bottom: 15px;"></div>
+    
     <button id="runBtn">📝 Generate Study Notes</button>
 
     <div class="output-section">
@@ -126,12 +140,65 @@ Example: 'In today's lecture on photosynthesis, we learned that plants convert s
   </div>
 
   <script>
+    let availableProviders = [];
+    
+    // Check available providers on page load
+    async function checkProviders() {
+      try {
+        const res = await fetch("http://localhost:8000/providers");
+        const data = await res.json();
+        availableProviders = Object.keys(data.available_providers);
+        
+        // Update status
+        const status = document.getElementById("providerStatus");
+        status.innerHTML = `
+          <div style="background: #e8f5e8; padding: 10px; border-radius: 6px; font-size: 14px;">
+            <strong>✅ Available Providers:</strong> ${availableProviders.join(", ")} 
+            <span style="color: #7f8c8d;">(Default: ${data.default_provider})</span>
+          </div>
+        `;
+        
+        // Update dropdown options
+        const select = document.getElementById("providerSelect");
+        const currentValue = select.value;
+        
+        // Clear existing options except "Use Default"
+        select.innerHTML = '<option value="">Use Default</option>';
+        
+        // Add available providers
+        Object.entries(data.available_providers).forEach(([provider, info]) => {
+          const option = document.createElement("option");
+          option.value = provider;
+          option.textContent = `${provider.charAt(0).toUpperCase() + provider.slice(1)} (${info.model})`;
+          select.appendChild(option);
+        });
+        
+        // Restore previous selection if still available
+        if (currentValue && availableProviders.includes(currentValue)) {
+          select.value = currentValue;
+        }
+        
+      } catch (e) {
+        document.getElementById("providerStatus").innerHTML = `
+          <div style="background: #ffebee; padding: 10px; border-radius: 6px; color: #c62828; font-size: 14px;">
+            ⚠️ Cannot connect to backend. Make sure the server is running.
+          </div>
+        `;
+      }
+    }
+    
+    // Check providers when page loads
+    checkProviders();
+    
+    document.getElementById("refreshProviders").onclick = checkProviders;
+
     document.getElementById("runBtn").onclick = async () => {
       const text = document.getElementById("inputText").value;
       if (!text.trim()) return alert("Please paste some text first!");
       
       const button = document.getElementById("runBtn");
       const output = document.getElementById("output");
+      const provider = document.getElementById("providerSelect").value;
       
       // Show loading state
       button.disabled = true;
@@ -139,20 +206,35 @@ Example: 'In today's lecture on photosynthesis, we learned that plants convert s
       output.innerHTML = '<div class="loading">AI is analyzing your text and creating study notes...</div>';
       
       try {
+        const requestBody = { text };
+        if (provider) {
+          requestBody.provider = provider;
+        }
+        
         const res = await fetch("http://localhost:8000/summarize", {
           method: "POST",
           headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({text})
+          body: JSON.stringify(requestBody)
         });
         
         if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          const errorData = await res.json();
+          throw new Error(errorData.detail || `HTTP ${res.status}: ${res.statusText}`);
         }
         
         const data = await res.json();
         
         // Format the output nicely
         let html = '';
+        
+        // Add provider info
+        if (data._metadata) {
+          html += `
+            <div style="background: #f0f8ff; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; color: #2c3e50;">
+              <strong>🤖 Generated by:</strong> ${data._metadata.provider} (${data._metadata.model})
+            </div>
+          `;
+        }
         
         if (data.summary) {
           html += `<div class="summary"><h4>📝 Summary</h4><p>${data.summary}</p></div>`;
