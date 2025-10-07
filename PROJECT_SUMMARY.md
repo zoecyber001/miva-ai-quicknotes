@@ -1,130 +1,66 @@
-# 🎯 Enhanced Hackathon Project: Miva AI QuickNotes
+# Miva AI QuickNotes
 
-## 🚀 What We Built (Now Even Better!)
+**Miva AI QuickNotes** is an AI-powered study assistant that helps students quickly understand and retain information from online lectures and PDFs.  
 
-**Multi-Provider AI Study Companion** - A production-ready prototype that demonstrates enterprise-level AI architecture while solving real problems for online students.
+The tool allows users to paste a video transcript or upload text-based study materials, and it instantly generates **concise summaries, key points, and quiz questions** to reinforce learning.  
 
-### ⭐ Key Features (Enhanced)
-- 🤖 **Multi-Provider AI Support**: OpenAI GPT, Google Gemini, Anthropic Claude, OpenRouter
-- 📝 **Smart Summarization**: Paste lecture transcripts or PDF text → get concise summaries
-- 🔑 **Key Points Extraction**: Auto-generates 4 bullet points of essential information  
-- ❓ **Quiz Generation**: Creates 3 relevant questions for self-testing
-- 🎨 **Beautiful UI**: Provider selection, real-time availability checking, response attribution
-- 🏗️ **Clean Architecture**: Unified AI provider abstraction with fallback strategies
+Built with **FastAPI (Python)** and a lightweight **HTML/JavaScript frontend**, Miva AI QuickNotes demonstrates how artificial intelligence can enhance online education by making complex content easier to digest.  
 
-### 🛠️ Technical Implementation (Professional Grade)
-- **Backend**: FastAPI + Multi-Provider AI Manager with unified interface
-- **Frontend**: Modern UI with provider selection and status indicators
-- **AI Providers**: OpenAI, Gemini, Claude, OpenRouter with automatic detection
-- **Architecture**: Clean abstraction layer, error handling, metadata tracking
-- **Configuration**: Environment-based provider setup with flexible model selection
+The project is especially tailored for **Miva Open University**, where most learning resources are delivered through videos and PDFs.
 
-## 📁 Enhanced Project Structure
-```
-miva-ai-quicknotes/
-├─ README.md                    # Comprehensive multi-provider setup guide  
-├─ requirements.txt             # All AI provider dependencies
-├─ .gitignore                  # Clean repo management
-├─ LICENSE                     # MIT license  
-├─ CONTRIBUTING.md             # Development guidelines
-├─ DEMO.md                     # Multi-provider testing guide
-├─ PROJECT_SUMMARY.md          # This enhanced summary
-├─ backend/
-│  ├─ main.py                  # Simplified FastAPI app
-│  ├─ ai_providers.py          # Multi-provider management class
-│  └─ .env.example            # All provider configurations
-└─ frontend/
-   └─ index.html               # Enhanced UI with provider selection
-```
+---
 
-## 🎯 Enhanced Hackathon Value Proposition
+## 🚀 Features
 
-### Why Judges Will Be Even More Impressed:
-1. **Enterprise Architecture**: Shows you understand scalable AI integration patterns
-2. **Provider Diversification**: Demonstrates risk management and vendor flexibility  
-3. **Unified Interface**: Clean abstraction that works across different AI APIs
-4. **Real Configuration**: Production-ready environment management
-5. **Professional UX**: Provider selection, status checking, response attribution
-6. **Cost Optimization**: Support for free/cheaper models via OpenRouter
+- 📝 **AI Summarization:** Generates short, clear summaries from lecture transcripts or PDFs.  
+- 💡 **Key Points Extraction:** Highlights important concepts and definitions automatically.  
+- ❓ **Auto Quiz Generation:** Creates quick revision questions to test understanding.  
+- 🧩 **Multi-format Support:** Works with text, pasted transcripts, or uploaded files.  
+- ⚡ **Simple, Fast Interface:** Clean UI for distraction-free learning.  
 
-### Perfect for Miva + AI Context:
-- **Multiple AI Backends**: Shows you can work with any AI provider
-- **Vendor Independence**: No lock-in to single AI provider
-- **Scalable Design**: Easy to add new providers or fallback logic
-- **Cost Management**: Mix of premium (GPT-4) and free (Llama) options
-- **Enterprise Ready**: Configuration patterns used in production systems
+---
 
-## 🎬 Enhanced Demo Script (2-3 minutes)
+## Tech Stack
 
-1. **"Here's the evolution"**: Started with single provider, now supports 4 major AI services
-2. **"Enterprise architecture"**: Show provider abstraction and unified interface
-3. **"Live provider comparison"**: Same text → OpenAI vs Gemini vs Claude → different styles
-4. **"Real-world ready"**: Point to configuration management, error handling, metadata
-5. **"Cost optimization"**: Switch to OpenRouter for free models when needed
+**Frontend:**  
+- HTML, CSS, JavaScript (Lightweight, responsive UI)
 
-## 📋 GitHub Repository Steps
+**Backend:**  
+- FastAPI (Python)  
+- OpenAI API (for summarization & question generation)
 
-### Repository Creation:
-1. Go to https://github.com/new
-2. Repository name: `miva-ai-quicknotes`
-3. Description: `🤖 Multi-Provider AI Study Companion - Transform lecture content into study notes using OpenAI, Gemini, Claude, or OpenRouter`
-4. Public repository
-5. Create repository
+**Others:**  
+- PDF Parser (for text extraction)  
+- Docker (optional deployment)  
 
-### Push Enhanced Code:
-```bash
-cd /home/zoecyber/miva-ai-quicknotes
-git remote add origin https://github.com/YOUR_USERNAME/miva-ai-quicknotes.git
-git branch -M main
-git push -u origin main
-```
+---
 
-### Hackathon Submission:
-- **GitHub URL**: https://github.com/YOUR_USERNAME/miva-ai-quicknotes
-- **Enhanced Description**: "Multi-provider AI study companion supporting OpenAI, Gemini, Claude & OpenRouter with unified interface and enterprise architecture patterns"
-- **Tech Stack**: "FastAPI + Multi-Provider AI Architecture + Modern Web UI"
+##  Problem Statement
 
-## 🏆 Competitive Advantages (Enhanced)
+Online universities like **Miva Open University** deliver most lectures and materials through videos and PDFs.  
+Students often struggle to keep up, revise efficiently, or find key insights from long sessions.  
 
-### Technical Excellence:
-1. **Architecture Patterns**: Shows enterprise-level AI integration design
-2. **Provider Abstraction**: Unified interface across different AI APIs
-3. **Configuration Management**: Professional environment-based setup
-4. **Error Handling**: Graceful degradation and provider fallbacks
-5. **Metadata Tracking**: Response attribution and model information
+**Miva AI QuickNotes** solves this by providing instant, AI-driven notes and quizzes — helping students save time and learn smarter.
 
-### Business Value:
-1. **Vendor Independence**: Not locked into single AI provider
-2. **Cost Optimization**: Mix free and premium models as needed
-3. **Risk Management**: Provider diversification for reliability
-4. **Future Proof**: Easy to add new AI providers as they emerge
-5. **Scale Ready**: Architecture supports enterprise deployment
+---
 
-### Demo Impact:
-1. **"Wow Factor"**: Live comparison of different AI providers
-2. **Professional Quality**: Enterprise patterns in a hackathon project
-3. **Practical Value**: Solves real student problems with flexible AI
-4. **Technical Depth**: Shows understanding of AI integration challenges
-5. **Business Awareness**: Demonstrates cost and vendor considerations
+## Future Improvements
 
-## 🎖️ What Makes This Special
+- 📚 Integration with Miva’s Learning Management System (LMS)  
+- 🗣️ Speech-to-Text for automatic lecture transcription  
+- 🌐 Collaboration features for group study  
+- 📱 Mobile-friendly PWA version  
 
-This project now demonstrates **advanced AI engineering skills**:
+---
 
-- **System Design**: Multi-provider architecture with clean abstractions
-- **API Integration**: Working with 4 different AI provider APIs  
-- **Error Handling**: Graceful degradation across provider differences
-- **Configuration**: Professional environment-based setup patterns
-- **User Experience**: Provider selection with real-time status feedback
+## 🧑‍💻 Author
 
-**The judges will think**: *"This person doesn't just use AI APIs - they architect AI systems like a senior engineer."*
+**Olaoluwa Aina Joshua**  
+Cybersecurity Enthusiast | AI Learner | UI/UX Designer  
+🔗 [GitHub](https://github.com/zoecyber001) | [LinkedIn](https://linkedin.com/in/zoecyber)
 
-## 🚀 Next Level Features (Future Ideas)
+---
 
-- **Auto-Fallback**: If one provider fails, automatically try another
-- **Cost Tracking**: Display estimated costs per provider/model  
-- **Response Caching**: Cache responses to avoid duplicate API calls
-- **Quality Scoring**: Rate different provider outputs and learn preferences
-- **Batch Processing**: Handle multiple documents simultaneously
+## 📜 License
 
-This enhanced version shows you can build **production-grade AI systems**, not just demo scripts! 🌟
+This project is licensed under the **MIT License** — feel free to use and improve it.
